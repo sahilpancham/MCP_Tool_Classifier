@@ -1,0 +1,383 @@
+{
+  "definitions": {
+    "missing_values": "Count of null values per column.",
+    "empty_text_fields": "Count of values that are null or whitespace-only.",
+    "schema_validity": "input_schema parsed with json.loads: valid_object is a JSON object, non_object is valid JSON that is not an object, malformed fails to parse.",
+    "exact_duplicates": "SHA-256 over name + description + input_schema. within_split counts rows after the first in each content group; cross_split counts content groups present in both splits.",
+    "literal_category_occurrences": "Training rows where the category word appears as a case-insensitive substring of the field.",
+    "exact_category_tool_names": "Training rows whose lowercased tool name is exactly the category word.",
+    "near_duplicates": "Training rows whose nearest *other* training row, by cosine similarity over TF-IDF of the tool text, scores at least 0.9."
+  },
+  "dataset_sizes": {
+    "train": 22143,
+    "validation": 4429,
+    "test": 4428
+  },
+  "missing_values": {
+    "train": {
+      "record_id": 0,
+      "server_slug": 0,
+      "name": 0,
+      "description": 0,
+      "input_schema": 3617,
+      "category": 0
+    },
+    "validation": {
+      "record_id": 0,
+      "server_slug": 0,
+      "name": 0,
+      "description": 0,
+      "input_schema": 737,
+      "category": 0
+    },
+    "test": {
+      "record_id": 0,
+      "server_slug": 0,
+      "name": 0,
+      "description": 0,
+      "input_schema": 743
+    }
+  },
+  "duplicate_record_ids": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "empty_text_fields": {
+    "train": {
+      "name": 0,
+      "description": 316,
+      "input_schema": 3617
+    },
+    "validation": {
+      "name": 0,
+      "description": 6,
+      "input_schema": 737
+    },
+    "test": {
+      "name": 0,
+      "description": 42,
+      "input_schema": 743
+    }
+  },
+  "schema_validity": {
+    "train": {
+      "valid_object": 18526,
+      "missing": 3617,
+      "malformed": 0,
+      "non_object": 0
+    },
+    "validation": {
+      "valid_object": 3692,
+      "missing": 737,
+      "malformed": 0,
+      "non_object": 0
+    },
+    "test": {
+      "valid_object": 3685,
+      "missing": 743,
+      "malformed": 0,
+      "non_object": 0
+    }
+  },
+  "train_label_distribution": {
+    "Read": {
+      "count": 14084,
+      "percentage": 63.6048
+    },
+    "Write": {
+      "count": 5433,
+      "percentage": 24.536
+    },
+    "Execute": {
+      "count": 1175,
+      "percentage": 5.3064
+    },
+    "Destructive": {
+      "count": 1264,
+      "percentage": 5.7084
+    },
+    "Financial": {
+      "count": 111,
+      "percentage": 0.5013
+    },
+    "Other": {
+      "count": 76,
+      "percentage": 0.3432
+    }
+  },
+  "server_isolation": {
+    "unique_servers": {
+      "train": 1448,
+      "validation": 292,
+      "test": 291
+    },
+    "overlap": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "passed": true
+  },
+  "exact_duplicates": {
+    "within_split": {
+      "train": 786,
+      "validation": 32,
+      "test": 93
+    },
+    "cross_split": {
+      "train_validation": 300,
+      "train_test": 252,
+      "validation_test": 56
+    }
+  },
+  "cross_split_label_consistency": {
+    "train_validation_shared_content_groups": 300,
+    "train_validation_conflicting_groups": 4,
+    "test": "Not evaluable because test labels are unavailable."
+  },
+  "target_leakage": {
+    "literal_category_occurrences": {
+      "name": {
+        "Read": 269,
+        "Write": 53,
+        "Execute": 94,
+        "Destructive": 0,
+        "Financial": 9,
+        "Other": 1
+      },
+      "description": {
+        "Read": 1146,
+        "Write": 256,
+        "Execute": 342,
+        "Destructive": 24,
+        "Financial": 44,
+        "Other": 590
+      },
+      "input_schema": {
+        "Read": 609,
+        "Write": 190,
+        "Execute": 173,
+        "Destructive": 7,
+        "Financial": 30,
+        "Other": 353
+      },
+      "server_slug": {
+        "Read": 72,
+        "Write": 0,
+        "Execute": 1,
+        "Destructive": 0,
+        "Financial": 26,
+        "Other": 7
+      }
+    },
+    "exact_category_tool_names": {
+      "Read": 17,
+      "Write": 7,
+      "Execute": 15,
+      "Destructive": 0,
+      "Financial": 0,
+      "Other": 1
+    },
+    "server_label_concentration": {
+      "single_category_servers": 580,
+      "total_servers": 1448,
+      "percentage": 40.0552
+    },
+    "interpretation": [
+      "Category words occur literally in some input fields, which is not by itself proof of leakage.",
+      "40.06% of training servers contain exactly one category, so server identity is a strong shortcut.",
+      "server_slug is therefore excluded from model input.",
+      "Server-level split isolation prevents training-server identities from reappearing in validation or test."
+    ]
+  },
+  "near_duplicates": {
+    "method": {
+      "representation": "TF-IDF over name + description + input_schema",
+      "ngram_range": [
+        1,
+        2
+      ],
+      "max_features": 100000,
+      "sublinear_tf": true,
+      "similarity_metric": "cosine similarity",
+      "threshold": 0.9
+    },
+    "near_duplicate_records": 2659,
+    "percentage_of_training": 12.0083,
+    "note": "Near-duplicates are retained. This is an audit finding; the supplied split is not modified.",
+    "examples": [
+      {
+        "similarity": 1.0,
+        "record_id_a": "f66eba0c74606cf5",
+        "record_id_b": "86e7342220de5986",
+        "name_a": "luma_get_tasks_batch",
+        "name_b": "sora_get_tasks_batch",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9589974937379988,
+        "record_id_a": "d68cde11133f324d",
+        "record_id_b": "df96f21355cbf3c6",
+        "name_a": "search_arxiv",
+        "name_b": "search_pubmed",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9488024674427311,
+        "record_id_a": "ff58297e43517c3c",
+        "record_id_b": "69ef12b1499b0818",
+        "name_a": "product_delete",
+        "name_b": "product_get",
+        "label_a": "Destructive",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9488024674427311,
+        "record_id_a": "69ef12b1499b0818",
+        "record_id_b": "ff58297e43517c3c",
+        "name_a": "product_get",
+        "name_b": "product_delete",
+        "label_a": "Read",
+        "label_b": "Destructive"
+      },
+      {
+        "similarity": 0.9471466656567811,
+        "record_id_a": "251b244c751bcda3",
+        "record_id_b": "f66eba0c74606cf5",
+        "name_a": "flux_get_tasks_batch",
+        "name_b": "luma_get_tasks_batch",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9387630029177816,
+        "record_id_a": "995f7a9d82ea1ffe",
+        "record_id_b": "9b411b357f7d2f10",
+        "name_a": "risk_score",
+        "name_b": "simulate",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9387630029177816,
+        "record_id_a": "9b411b357f7d2f10",
+        "record_id_b": "995f7a9d82ea1ffe",
+        "name_a": "simulate",
+        "name_b": "risk_score",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9378927328695298,
+        "record_id_a": "4c0ef9863a3c0eb4",
+        "record_id_b": "eae19d6d9abbc300",
+        "name_a": "luma_list_actions",
+        "name_b": "sora_list_actions",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9378927328695298,
+        "record_id_a": "eae19d6d9abbc300",
+        "record_id_b": "4c0ef9863a3c0eb4",
+        "name_a": "sora_list_actions",
+        "name_b": "luma_list_actions",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9256628277563326,
+        "record_id_a": "b66f63dc549c1c0a",
+        "record_id_b": "7981fd8707722f41",
+        "name_a": "luma_get_task",
+        "name_b": "sora_get_task",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9256628277563326,
+        "record_id_a": "7981fd8707722f41",
+        "record_id_b": "b66f63dc549c1c0a",
+        "name_a": "sora_get_task",
+        "name_b": "luma_get_task",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9160473058590413,
+        "record_id_a": "99c31833e1f5b9ac",
+        "record_id_b": "117ed61d1f04ba97",
+        "name_a": "read_biorxiv_paper",
+        "name_b": "read_medrxiv_paper",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9160473058590413,
+        "record_id_a": "117ed61d1f04ba97",
+        "record_id_b": "99c31833e1f5b9ac",
+        "name_a": "read_medrxiv_paper",
+        "name_b": "read_biorxiv_paper",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9135293763666975,
+        "record_id_a": "006e736900b67e4c",
+        "record_id_b": "995f7a9d82ea1ffe",
+        "name_a": "policy_gate",
+        "name_b": "risk_score",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9087881868679691,
+        "record_id_a": "e1ad005fd03b5eaa",
+        "record_id_b": "b7cb4ad274ae8e67",
+        "name_a": "serp_google_images",
+        "name_b": "serp_google_videos",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9087881868679691,
+        "record_id_a": "b7cb4ad274ae8e67",
+        "record_id_b": "e1ad005fd03b5eaa",
+        "name_a": "serp_google_videos",
+        "name_b": "serp_google_images",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9009941127974763,
+        "record_id_a": "f5b0c2820debbd55",
+        "record_id_b": "251b244c751bcda3",
+        "name_a": "nanobanana_get_tasks_batch",
+        "name_b": "flux_get_tasks_batch",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9000027307040206,
+        "record_id_a": "6ce4ab2ad673b1e0",
+        "record_id_b": "851cd6f3586372ea",
+        "name_a": "download_biorxiv",
+        "name_b": "download_medrxiv",
+        "label_a": "Read",
+        "label_b": "Read"
+      },
+      {
+        "similarity": 0.9000027307040206,
+        "record_id_a": "851cd6f3586372ea",
+        "record_id_b": "6ce4ab2ad673b1e0",
+        "name_a": "download_medrxiv",
+        "name_b": "download_biorxiv",
+        "label_a": "Read",
+        "label_b": "Read"
+      }
+    ]
+  }
+}

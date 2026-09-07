@@ -1,0 +1,285 @@
+{
+  "validation_error_count": 287,
+  "validation_error_rate": 0.0648001806276812,
+  "errors_by_actual_class": {
+    "Read": 97,
+    "Write": 96,
+    "Execute": 53,
+    "Destructive": 19,
+    "Financial": 7,
+    "Other": 15
+  },
+  "recurring_failure_modes": [
+    {
+      "name": "Read vs Write ambiguity",
+      "evidence": {
+        "Write_to_Read": 81,
+        "Read_to_Write": 70,
+        "combined": 151
+      },
+      "description": "Information-returning tools and state-changing tools are swapped. The model keys on wording such as 'returns' or 'generate' rather than on whether state changes."
+    },
+    {
+      "name": "Execute vs Read/Write ambiguity",
+      "evidence": {
+        "Execute_to_Read": 31,
+        "Execute_to_Write": 22,
+        "Read_to_Execute": 19,
+        "Write_to_Execute": 11
+      },
+      "description": "Workflows, browser actions and analysis tools are labelled by surface wording rather than by whether they run an operation. Execute is the vaguest category and several of these are genuinely ambiguous."
+    },
+    {
+      "name": "Minority-class collapse",
+      "evidence": {
+        "Other_errors": 15,
+        "Financial_errors": 7,
+        "Destructive_errors": 19
+      },
+      "description": "Other is never predicted at all: 76 training examples and no shared surface signal, which class weighting alone did not fix. Financial and Destructive are absorbed into Write."
+    }
+  ],
+  "example_selection": "Up to 4 highest-confidence errors per actual class, so every class including the minority classes is covered.",
+  "examples": [
+    {
+      "record_id": "de2497216aca79ec",
+      "server_slug": "agentpact-marketplace",
+      "name": "agentpact.submit_delivery",
+      "actual_category": "Read",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Submit milestone delivery artifacts",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"notes\":{\"type\":\"string\"},\"apiKey\":{\"type\":\"string\",\"description\":\"Your API key\"},\"artifacts\":{\"type\":\"array\",\"items\":{\"type\":\"object\"}},\"milestoneId\":{\"type\":\"string\",\"format\":\"uuid\"},\"submittedBy\":{\"type\":\"string\",\"format\":\"uuid\"}}}"
+    },
+    {
+      "record_id": "23b4842879e344c9",
+      "server_slug": "amazon-translate-mcp-server",
+      "name": "smart_translate_workflow",
+      "actual_category": "Read",
+      "predicted_category": "Execute",
+      "confidence": 1.0,
+      "description": "Execute intelligent translation workflow with automatic language detection and quality validation.\n\nThis workflow combines multiple translation operations into a single, intelligent process:\n1. Automatically detects source language (if enabled)\n2. Validates language pair support\n3. Translates text with optional terminology\n4. Validates translation quality\n5. Returns comprehensive results with quality metrics\n\nBenefits:\n- Eliminates manual language specification\n- Built-in quality assurance with confidence scoring\n- Automatic language pair validation\n- Comprehensive results with detection, translation, and quality metrics",
+      "input_schema": "{\"type\":\"object\",\"required\":[\"text\",\"target_language\"],\"properties\":{\"text\":{\"type\":\"string\",\"description\":\"Text to translate\"},\"target_language\":{\"type\":\"string\",\"description\":\"Target language code\"},\"quality_threshold\":{\"type\":\"number\",\"default\":0.8,\"description\":\"Minimum quality score threshold (0.0-1.0)\"},\"terminology_names\":{\"type\":\"array\",\"description\":\"List of custom terminology names\"},\"auto_detect_language\":{\"type\":\"boolean\",\"default\":true,\"description\":\"Whether to auto-detect source language\"}}}"
+    },
+    {
+      "record_id": "7ea97ee5be8e3255",
+      "server_slug": "citedy-citedy",
+      "name": "seo.og_image.generate",
+      "actual_category": "Read",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Generate an Open Graph image artifact and return hosted URL for brand assets.",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"logoUrl\":{\"type\":\"string\",\"format\":\"uri\",\"maxLength\":2000,\"description\":\"URL to brand logo image\"},\"headline\":{\"type\":\"string\",\"maxLength\":120,\"description\":\"Main headline text\"},\"template\":{\"enum\":[\"product\",\"blog_post\",\"comparison\",\"case_study\"],\"type\":\"string\",\"description\":\"OG image template style\"},\"brandName\":{\"type\":\"string\",\"maxLength\":100,\"minLength\":1,\"description\":\"Brand or company name\"},\"subheadline\":{\"type\":\"string\",\"maxLength\":180,\"description\":\"Secondary headline text\"},\"primaryColor\":{\"type\":\"string\",\"pattern\":\"^#[0-9A-Fa-f]{6}$\",\"description\":\"Brand primary color in hex format #RRGGBB\"},\"brandDescription\":{\"type\":\"string\",\"maxLength\":1000,\"description\":\"Short brand description\"}}}"
+    },
+    {
+      "record_id": "e193ddecdaf27146",
+      "server_slug": "io-github-sergiorico1-thrd",
+      "name": "thrd.send",
+      "actual_category": "Read",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Initiate a new outbound email. Requires idempotency. Tier 3 cold outbound may return por_required. High-risk inbound context may require security_ack_token.",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"inboxId\",\"to\",\"subject\"],\"properties\":{\"to\":{\"type\":\"string\"},\"html\":{\"type\":\"string\"},\"text\":{\"type\":\"string\"},\"inboxId\":{\"type\":\"string\"},\"subject\":{\"type\":\"string\"},\"porToken\":{\"type\":\"string\"},\"porAnswer\":{\"type\":\"string\"},\"grantToken\":{\"type\":\"string\"},\"attachments\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"required\":[\"storage_ref\",\"filename\",\"mime\",\"size\"],\"properties\":{\"mime\":{\"type\":\"string\"},\"size\":{\"type\":\"integer\",\"minimum\":0},\"filename\":{\"type\":\"string\"},\"storage_ref\":{\"type\":\"string\"}},\"additionalProperties\":false}},\"consentToken\":{\"type\":\"string\"},\"idempotencyKey\":{\"type\":\"string\"},\"sourceMessageId\":{\"type\":\"string\"},\"securityAckToken\":{\"type\":\"string\"}},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "e53ade88e08df696",
+      "server_slug": "io-github-justasmonkev-mcp-accessibility-scanner",
+      "name": "browser_console_messages",
+      "actual_category": "Write",
+      "predicted_category": "Read",
+      "confidence": 1.0,
+      "description": "Returns all console messages",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "b5b5b6af378f432f",
+      "server_slug": "io-github-justasmonkev-mcp-accessibility-scanner",
+      "name": "browser_network_requests",
+      "actual_category": "Write",
+      "predicted_category": "Read",
+      "confidence": 1.0,
+      "description": "Returns all network requests since loading the page",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"properties\":{},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "df66ae7ef002ca44",
+      "server_slug": "io-github-merit-systems-agentcash",
+      "name": "discover_api_endpoints",
+      "actual_category": "Write",
+      "predicted_category": "Read",
+      "confidence": 1.0,
+      "description": "List available endpoints at an API origin. Returns endpoint URLs with descriptions of what each does and the auth mode for each (paid or SIWX). Works with any origin, not just the registered ones.\n\nCall this when you need to see what routes are available at an origin \u2014 whether it's one of the registered origins or any other origin you've identified as useful. Treat the auth mode as guidance for what the route may require; fetch handles both SIWX and payment.\n\nThe response always indicates whether guidance is available. Guidance is documentation published by the API provider explaining how endpoints work together, edge cases, and usage tips. compact guidance is included automatically; set include_guidance=true to force-include full usage documentation when you need to compose two or more endpoints or need clarification on how the origin works.",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"url\"],\"properties\":{\"url\":{\"type\":\"string\",\"description\":\"The origin URL to discover endpoints on (e.g. https://stableenrich.dev)\"},\"includeGuidance\":{\"type\":\"boolean\",\"description\":\"Request the origin's usage guidance. true=always include, false=never include, omit=auto (included when compact). Guidance explains how to compose multiple endpoints and covers edge cases.\"}}}"
+    },
+    {
+      "record_id": "53a66cc1b0a6e8fb",
+      "server_slug": "blender",
+      "name": "download_polyhaven_asset",
+      "actual_category": "Write",
+      "predicted_category": "Read",
+      "confidence": 0.99951171875,
+      "description": "Download and import a Polyhaven asset into Blender",
+      "input_schema": ""
+    },
+    {
+      "record_id": "428b77094e773dc1",
+      "server_slug": "agent-passport-system-cryptographic-identity-for-ai-agents",
+      "name": "aps_aggregate_settlement",
+      "actual_category": "Execute",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Aggregate a batch of Attribution Primitives over a half-open settlement period [t0, t1) into a signed SettlementRecord. Each axis (D, P, G, C) produces a per-contributor total with a balanced-Merkle commitment. Residual buckets pool sub-threshold contributors per Build A \u00a74.1. Output is a fully signed record ready for third-party verification. Spec: BUILD-C-SETTLEMENT-PIPELINE.md.",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"receipts\",\"period\",\"gateway_did\",\"gateway_private_key\"],\"properties\":{\"period\":{\"type\":\"object\",\"required\":[\"t0\",\"t1\",\"period_id\"],\"properties\":{\"t0\":{\"type\":\"string\",\"description\":\"Period start (canonical ISO-8601 UTC ms + Z). Inclusive.\"},\"t1\":{\"type\":\"string\",\"description\":\"Period end (canonical ISO-8601 UTC ms + Z). Exclusive.\"},\"period_id\":{\"type\":\"string\",\"description\":\"Gateway-scoped period identifier\"}},\"additionalProperties\":false},\"receipts\":{\"type\":\"array\",\"description\":\"Array of AttributionPrimitives to aggregate\"},\"issued_at\":{\"type\":\"string\",\"description\":\"Override issued_at (canonical ISO-8601 UTC ms + Z); defaults to now\"},\"gateway_did\":{\"type\":\"string\",\"description\":\"Gateway DID that signs the record\"},\"gateway_private_key\":{\"type\":\"string\",\"description\":\"Ed25519 gateway private key (hex)\"}},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "86f99288adc5c47d",
+      "server_slug": "agentidx-zarq-risk",
+      "name": "crypto_dtd",
+      "actual_category": "Execute",
+      "predicted_category": "Read",
+      "confidence": 1.0,
+      "description": "Get the Distance-to-Default (DtD) score for a crypto token. DtD measures distance-to-default on a 0-5 scale (5=healthy, 0=imminent collapse). Returns 7 signal scores (Liquidity, Holders, Resilience, Fundamental, Contagion, Structural, Relative Weakness), trend classification (FREEFALL/FALLING/SLIDING/STABLE/IMPROVING), crash probability, and Structural Collapse status. Example: crypto_ndd(token_id='solana')",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"token_id\":{\"type\":\"string\",\"description\":\"Token identifier (e.g., 'solana'). Use lowercase CoinGecko-style IDs.\"}}}"
+    },
+    {
+      "record_id": "293b79fe16c64b0b",
+      "server_slug": "playwright",
+      "name": "browser_file_upload",
+      "actual_category": "Execute",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Upload a local file to a web page",
+      "input_schema": ""
+    },
+    {
+      "record_id": "545e790abfb11325",
+      "server_slug": "playwright",
+      "name": "browser_select_option",
+      "actual_category": "Execute",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Select an option from a dropdown",
+      "input_schema": ""
+    },
+    {
+      "record_id": "4187caa9b4a1e556",
+      "server_slug": "human-pages-ai-humanpages",
+      "name": "stop_stream",
+      "actual_category": "Destructive",
+      "predicted_category": "Execute",
+      "confidence": 1.0,
+      "description": "Stop a stream permanently and mark the job as completed. Can be called by agent or human on STREAMING or PAUSED jobs.",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"job_id\":{\"type\":\"string\",\"description\":\"The job ID\"},\"agent_key\":{\"type\":\"string\",\"description\":\"Your agent API key (starts with hp_)\"}}}"
+    },
+    {
+      "record_id": "4bf5a121bf9106e2",
+      "server_slug": "invarium-ai-invarium",
+      "name": "invarium_manage_scenario",
+      "actual_category": "Destructive",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Manage a scenario: update its fields, delete it, or toggle its active state.\n\nIMPORTANT: Deletion is permanent and irreversible. When action=\"delete\",\nyou MUST first call this tool WITHOUT confirm=true. The tool will return\na confirmation prompt listing the scenario to be deleted. Show this to\nthe user and only re-call with confirm=true after they explicitly approve.\nNEVER set confirm=true on the first call. NEVER delete multiple scenarios\nin a loop without showing the user the full list and getting one explicit\nconfirmation for the batch.\n\nArgs:\n    scenario_id: ID of the scenario to manage.\n    action: Operation to perform \u2014 \"update\", \"delete\", or \"toggle\".\n    name: New name for the scenario (update only).\n    description: New description for the scenario (update only).\n    expected_behavior: New expected behavior text (update only).\n    tags: JSON array string of tags, e.g. '[\"auth\", \"edge-case\"]' (update only).\n    confirm: Required for delete \u2014 must be true to execute deletion.\n        First call without confirm to get a confirmation prompt.\n\nReturns:\n    A confirmation string on success, or an error message on failure.",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"name\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"null\"}],\"default\":null},\"tags\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"null\"}],\"default\":null},\"action\":{\"type\":\"string\"},\"confirm\":{\"type\":\"boolean\",\"default\":false},\"description\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"null\"}],\"default\":null},\"scenario_id\":{\"type\":\"string\"},\"expected_behavior\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"null\"}],\"default\":null}}}"
+    },
+    {
+      "record_id": "588d5e55c9b3f2a4",
+      "server_slug": "brandcode-mcp",
+      "name": "brand_preflight",
+      "actual_category": "Destructive",
+      "predicted_category": "Read",
+      "confidence": 0.99951171875,
+      "description": "Check HTML/CSS against brand rules \u2014 catches off-brand colors, wrong fonts, missing logo, and anti-pattern violations (drop shadows, gradients, etc.). Pass an HTML string or file path. Mode 'check' (default) runs all compliance checks and returns pass/warn/fail per rule. Mode 'rules' lists all active preflight rules without checking content. Use after generating any visual content to validate brand compliance. Returns overall status and per-check details. NOT for scoring content copy \u2014 use brand_audit_content. NOT for brand directory validation \u2014 use brand_audit.",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"html\"],\"properties\":{\"html\":{\"type\":\"string\",\"description\":\"HTML to validate: either a full HTML string (with <style> blocks) or a file path ending in .html (e.g. 'output.html')\"},\"mode\":{\"enum\":[\"check\",\"rules\"],\"type\":\"string\",\"default\":\"check\",\"description\":\"'check' (default): validates HTML against all brand rules. 'rules': lists all active rules without running checks.\"}},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "d3796951d53275d6",
+      "server_slug": "session-forge",
+      "name": "data_manage",
+      "actual_category": "Destructive",
+      "predicted_category": "Write",
+      "confidence": 0.9970703125,
+      "description": "Manage session-forge data. Actions: prune (remove entries older than N days), export (dump all data as JSON), clear (wipe a specific store), stats (show entry counts and file sizes).",
+      "input_schema": "{\"type\":\"object\",\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"required\":[\"action\"],\"properties\":{\"days\":{\"type\":\"number\",\"description\":\"For prune: remove entries older than this many days (default: 90)\"},\"store\":{\"enum\":[\"journal\",\"decisions\",\"dead_ends\",\"profile\",\"all\"],\"type\":\"string\",\"description\":\"Which data store to act on (default: all)\"},\"action\":{\"enum\":[\"prune\",\"export\",\"clear\",\"stats\"],\"type\":\"string\",\"description\":\"Action to perform\"}},\"additionalProperties\":false}"
+    },
+    {
+      "record_id": "7af0353aa4e8959c",
+      "server_slug": "aws-iot-sitewise-mcp-server",
+      "name": "cancel_metadata_transfer_job",
+      "actual_category": "Financial",
+      "predicted_category": "Destructive",
+      "confidence": 1.0,
+      "description": "Cancel a metadata transfer job.\n\nArgs:\n    metadata_transfer_job_id: The ID of the metadata transfer job to cancel\n    region: AWS region (default: us-east-1)\n\nReturns:\n    Dictionary containing cancellation response",
+      "input_schema": "{\"type\":\"object\",\"required\":[\"metadata_transfer_job_id\",\"region\"],\"properties\":{\"region\":{\"type\":\"string\",\"description\":\"AWS region\"},\"metadata_transfer_job_id\":{\"type\":\"string\",\"description\":\"The metadata transfer job ID to cancel\"}}}"
+    },
+    {
+      "record_id": "3eb507d8d8842c74",
+      "server_slug": "io-github-nyxtoolsdev-quickbooks-mcp-server",
+      "name": "edit_deposit",
+      "actual_category": "Financial",
+      "predicted_category": "Write",
+      "confidence": 1.0,
+      "description": "Modify an existing deposit. Can update date, memo, deposit account, department, and/or lines. CRITICAL for line changes: The QB Deposit API does NOT replace lines - it merges them. Lines WITH line_id update existing lines. Lines WITHOUT line_id are ADDED as new. Lines NOT included are KEPT unchanged. To 'delete' a line, you must include ALL existing lines with their line_ids and set unwanted lines to amount: 0. Line amounts must sum to the original deposit total (use expected_total to override for corrupted deposits).",
+      "input_schema": "{\"type\":\"object\",\"required\":[\"id\"],\"properties\":{\"id\":{\"type\":\"string\",\"description\":\"Deposit ID to edit\"},\"memo\":{\"type\":\"string\",\"description\":\"New private memo (optional)\"},\"draft\":{\"type\":\"boolean\",\"description\":\"If true, validate and show preview without saving (default: true)\"},\"lines\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"required\":[\"amount\",\"account_name\"],\"properties\":{\"amount\":{\"type\":\"number\",\"description\":\"Line amount (positive or negative number)\"},\"line_id\":{\"type\":\"string\",\"description\":\"ID of existing line to update (preserves Entity/Vendor reference). Omit to create new line.\"},\"description\":{\"type\":\"string\",\"description\":\"Line description\"},\"account_name\":{\"type\":\"string\",\"description\":\"Source account name/number (auto-resolved to ID)\"}}},\"description\":\"IMPORTANT: You MUST include ALL existing lines with their line_ids. Lines without line_id are ADDED (not replaced). Lines not included are KEPT (not deleted). To 'delete' a line, set its amount to 0. Line amounts must sum to original deposit total.\"},\"txn_date\":{\"type\":\"string\",\"description\":\"New transaction date in YYYY-MM-DD format (optional)\"},\"expected_total\":{\"type\":\"number\",\"description\":\"Override total validation with this expected amount (for fixing corrupted deposits). Lines must sum to this value instead of current deposit total.\"},\"department_name\":{\"type\":\"string\",\"description\":\"Header-level department/location name (auto-resolved to ID)\"},\"deposit_to_account\":{\"type\":\"string\",\"description\":\"New deposit account name/number (Bank account)\"}}}"
+    },
+    {
+      "record_id": "06a97e533e450152",
+      "server_slug": "aws-iot-sitewise-mcp-server",
+      "name": "create_metadata_transfer_job",
+      "actual_category": "Financial",
+      "predicted_category": "Write",
+      "confidence": 0.99951171875,
+      "description": "Create a new metadata transfer job for bulk import/export operations between S3 and IoT SiteWise.\n\nThis tool provides a user-friendly way to set up metadata transfer jobs with support for bulk export\nusing IoT SiteWise source configuration filters, avoiding the need for individual API calls.\n\nArgs:\n    transfer_direction: Direction of transfer:\n        - \"s3_to_sitewise\": Import metadata from S3 to IoT SiteWise\n        - \"sitewise_to_s3\": Export metadata from IoT SiteWise to S3\n    s3_bucket_name: S3 bucket name. If not provided, the agent should list available S3 buckets.\n    s3_object_key: S3 object key/path. If not provided, will use sensible defaults.\n    export_all_resources: For sitewise_to_s3: Export all IoT SiteWise resources using bulk filters\n    asset_model_id: For sitewise_to_s3: Specific asset model ID to export\n    asset_id: For sitewise_to_s3: Specific asset ID to export\n    include_child_assets: For asset exports: Include child assets in hierarchy (includeOffspring). Cannot be True when include_asset_model is True.\n    include_asset_model: For asset exports: Include asset model definition (includeAssetModel). Cannot be True when include_child_assets is True.\n    region: AWS region (default: us-east-1)\n    metadata_transfer_job_id: Optional custom job ID\n    description: Optional job description\n\nReturns:\n    Dictionary containing job creation response or guidance for next steps\n\nExamples:\n    # Import from S3 to IoT SiteWise\n    create_metadata_transfer_job(\n        transfer_direction=\"s3_to_sitewise\",\n        s3_bucket_name=\"my-sitewise-metadata\",\n        s3_object_key=\"bulk-import/assets.json\"\n    )\n\n    # Export ALL IoT SiteWise resources to S3 (bulk export)\n    create_metadata_transfer_job(\n        transfer_direction=\"sitewise_to_s3\",\n        s3_bucket_name=\"my-sitewise-exports\",\n        export_all_resources=True\n    )\n\n    # Export specific asset model and asset\n    create_metadata_transfer_job(\n        transfer_direction=\"sitewise_to_s3\",\n        s3_bucket_name=\"my-sitewise-exports\",\n        asset_model_id=\"a1b2c3d4-5678-90ab-cdef-1234567890ab\",\n        asset_id=\"f1e2d3c4-b5a6-9078-1234-567890abcdef\"\n    )",
+      "input_schema": "{\"type\":\"object\",\"required\":[\"transfer_direction\",\"s3_bucket_name\",\"export_all_resources\",\"include_child_assets\",\"include_asset_model\",\"region\"],\"properties\":{\"region\":{\"type\":\"string\",\"description\":\"AWS region\"},\"asset_id\":{\"type\":\"string\",\"description\":\"For sitewise_to_s3: Specific asset ID to export.\"},\"description\":{\"type\":\"string\",\"description\":\"Job description\"},\"s3_object_key\":{\"type\":\"string\",\"description\":\"S3 object key/path (e.g., \\\"metadata/assets.json\\\"). If not provided, will use default path.\"},\"asset_model_id\":{\"type\":\"string\",\"description\":\"For sitewise_to_s3: Specific asset model ID to export.\"},\"s3_bucket_name\":{\"type\":\"string\",\"description\":\"S3 bucket name.\"},\"transfer_direction\":{\"type\":\"string\",\"description\":\"Direction of transfer: \\\"s3_to_sitewise\\\" (import from S3 to IoT SiteWise) or \\\"sitewise_to_s3\\\" (export from IoT SiteWise to S3)\"},\"include_asset_model\":{\"type\":\"boolean\",\"description\":\"For asset exports: Include asset model definition (includeAssetModel). Cannot be True when include_child_assets is True.\"},\"export_all_resources\":{\"type\":\"boolean\",\"description\":\"For sitewise_to_s3: Export all IoT SiteWise resources (asset models, assets, etc.) using bulk export filters\"},\"include_child_assets\":{\"type\":\"boolean\",\"description\":\"For asset exports: Include child assets in hierarchy (includeOffspring). Cannot be True when include_asset_model is True.\"},\"metadata_transfer_job_id\":{\"type\":\"string\",\"description\":\"Optional custom job ID\"}}}"
+    },
+    {
+      "record_id": "50ecd66ebf150251",
+      "server_slug": "io-github-cashfree-cashfree-mcp",
+      "name": "payouts",
+      "actual_category": "Financial",
+      "predicted_category": "Execute",
+      "confidence": 0.994140625,
+      "description": "Execute Cashfree payout operations",
+      "input_schema": ""
+    },
+    {
+      "record_id": "248d1dbfe25b8efe",
+      "server_slug": "xiaobenyang-com-mcp-tools-3",
+      "name": "glob",
+      "actual_category": "Other",
+      "predicted_category": "Read",
+      "confidence": 1.0,
+      "description": "Find files matching a glob pattern (e.g., '**/*.ts', 'src/**/*.js')",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"pattern\":{\"type\":\"string\",\"description\":\"Glob pattern to match files (e.g., '**/*.ts')\"}}}"
+    },
+    {
+      "record_id": "cae5c5eea18a61e8",
+      "server_slug": "shanejonas-openrpc",
+      "name": "rpc_discover",
+      "actual_category": "Other",
+      "predicted_category": "Read",
+      "confidence": 0.99951171875,
+      "description": "Discover available JSON-RPC methods",
+      "input_schema": ""
+    },
+    {
+      "record_id": "9957802793a344bf",
+      "server_slug": "aws-lambda-tool-mcp-server",
+      "name": "lambda_function",
+      "actual_category": "Other",
+      "predicted_category": "Read",
+      "confidence": 0.99755859375,
+      "description": "Tool for invoking a specific AWS Lambda function with parameters.",
+      "input_schema": "{\"type\":\"object\",\"required\":[\"parameters\"],\"properties\":{\"parameters\":{\"type\":\"object\"}}}"
+    },
+    {
+      "record_id": "c41f82feba2e10da",
+      "server_slug": "seizedata-trx-categorization-mcp",
+      "name": "categorize-transactions-by-dazoom",
+      "actual_category": "Other",
+      "predicted_category": "Read",
+      "confidence": 0.9970703125,
+      "description": "[\uc528\uc988\ub370\uc774\ud130] DaZoom \ud1b5\uc7a5 \ubc0f \uce74\ub4dc \uac70\ub798\ub0b4\uc5ed \ubd84\uc11d \ud234",
+      "input_schema": "{\"type\":\"object\",\"properties\":{\"inputs\":{\"type\":\"array\",\"items\":{\"$ref\":\"#/$defs/TransactionInput\"},\"title\":\"Inputs\"}}}"
+    }
+  ]
+}
