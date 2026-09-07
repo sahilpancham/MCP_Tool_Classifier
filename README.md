@@ -1,4 +1,4 @@
-# MCP Tool Classification — AI Engineer Take-Home
+# MCP Tool Classification 
 
 Classify an MCP (Model Context Protocol) tool into exactly one action
 category: `Read`, `Write`, `Execute`, `Destructive`, `Financial`, `Other`.
