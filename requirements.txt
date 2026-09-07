@@ -1,0 +1,19 @@
+# Python 3.10+
+# The submitted experiment ran on a single 16 GB NVIDIA T4 (Google Colab).
+# Install a torch build matching your CUDA version first:
+#   https://pytorch.org/get-started/locally/
+
+torch>=2.4
+
+# >=4.46 for Trainer's processing_class argument; <5 because the 5.x Trainer
+# API is not compatible with scripts/train_slm.py.
+transformers>=4.46,<5
+peft==0.18.1
+datasets>=2.20
+accelerate>=0.34
+
+scikit-learn>=1.4
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.8
+tqdm>=4.66

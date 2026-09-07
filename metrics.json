@@ -1,0 +1,202 @@
+{
+  "primary_metric": "macro_f1",
+  "evaluation_split": "validation",
+  "baseline": {
+    "model": "TF-IDF + Logistic Regression",
+    "features": [
+      "name",
+      "description",
+      "input_schema"
+    ],
+    "tfidf": {
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "max_features": 150000,
+      "sublinear_tf": true
+    },
+    "classifier": {
+      "solver": "liblinear",
+      "class_weight": "balanced",
+      "max_iter": 1000,
+      "random_state": 42
+    },
+    "training_time_seconds": 14.495278890000009,
+    "accuracy": 0.8751411153759313,
+    "macro_f1": 0.6738411640129035,
+    "weighted_f1": 0.8737195840008964,
+    "per_class": {
+      "Read": {
+        "precision": 0.918804920913884,
+        "recall": 0.9279375221867234,
+        "f1": 0.9233486400565172,
+        "support": 2817
+      },
+      "Write": {
+        "precision": 0.7973568281938326,
+        "recall": 0.8325666973321068,
+        "f1": 0.8145814581458146,
+        "support": 1087
+      },
+      "Execute": {
+        "precision": 0.6600985221674877,
+        "recall": 0.5702127659574469,
+        "f1": 0.6118721461187214,
+        "support": 235
+      },
+      "Destructive": {
+        "precision": 0.95,
+        "recall": 0.8260869565217391,
+        "f1": 0.8837209302325582,
+        "support": 253
+      },
+      "Financial": {
+        "precision": 0.55,
+        "recall": 0.5,
+        "f1": 0.5238095238095238,
+        "support": 22
+      },
+      "Other": {
+        "precision": 0.5,
+        "recall": 0.2,
+        "f1": 0.2857142857142857,
+        "support": 15
+      }
+    },
+    "performance": {
+      "benchmark_examples": 1000,
+      "latency_per_example_ms": 0.21076181399985217,
+      "throughput_examples_per_second": 4744.692508675701,
+      "model_pickle_size_mb": 6.867270469665527,
+      "vectorizer_pickle_size_mb": 6.162847518920898,
+      "total_artifact_size_mb": 13.030117988586426
+    }
+  },
+  "training": {
+    "base_model": "Qwen/Qwen2.5-1.5B",
+    "lora": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ],
+      "modules_to_save": [
+        "score"
+      ]
+    },
+    "training_args": {
+      "num_train_epochs": 2,
+      "per_device_train_batch_size": 2,
+      "per_device_eval_batch_size": 4,
+      "gradient_accumulation_steps": 8,
+      "learning_rate": 0.0002,
+      "weight_decay": 0.01,
+      "warmup_steps": 100
+    },
+    "effective_batch_size": 16,
+    "max_sequence_length": 1024,
+    "seed": 42,
+    "class_weights": {
+      "Read": 0.262034933,
+      "Write": 0.679274802,
+      "Execute": 3.140851064,
+      "Destructive": 2.919699367,
+      "Financial": 33.24774775,
+      "Other": 48.55921053
+    },
+    "checkpoint_selection": "highest validation macro F1",
+    "selected_checkpoint": "checkpoint-2768",
+    "selected_epoch": 2.0,
+    "best_macro_f1": 0.7219790381124414,
+    "evaluations": [
+      {
+        "epoch": 1.0,
+        "step": 1384,
+        "eval_loss": 0.3835652768611908,
+        "eval_accuracy": 0.9198464664709867,
+        "eval_macro_f1": 0.7208726922631885,
+        "eval_weighted_f1": 0.9201149880847702
+      },
+      {
+        "epoch": 2.0,
+        "step": 2768,
+        "eval_loss": 0.4138686954975128,
+        "eval_accuracy": 0.9351998193723188,
+        "eval_macro_f1": 0.7219790381124414,
+        "eval_weighted_f1": 0.9332336975293177
+      }
+    ]
+  },
+  "slm": {
+    "model": "Qwen/Qwen2.5-1.5B + LoRA",
+    "invalid_output_rate": 0.0,
+    "labels": [
+      "Read",
+      "Write",
+      "Execute",
+      "Destructive",
+      "Financial",
+      "Other"
+    ],
+    "accuracy": 0.9351998193723188,
+    "macro_f1": 0.7219790381124414,
+    "weighted_f1": 0.9332336975293177,
+    "per_class": {
+      "Read": {
+        "precision": 0.9533824044865055,
+        "recall": 0.9655662051828185,
+        "f1": 0.9594356261022927,
+        "support": 2817
+      },
+      "Write": {
+        "precision": 0.9033728350045579,
+        "recall": 0.9116835326586936,
+        "f1": 0.9075091575091575,
+        "support": 1087
+      },
+      "Execute": {
+        "precision": 0.8425925925925926,
+        "recall": 0.774468085106383,
+        "f1": 0.8070953436807096,
+        "support": 235
+      },
+      "Destructive": {
+        "precision": 0.9629629629629629,
+        "recall": 0.924901185770751,
+        "f1": 0.9435483870967742,
+        "support": 253
+      },
+      "Financial": {
+        "precision": 0.75,
+        "recall": 0.6818181818181818,
+        "f1": 0.7142857142857143,
+        "support": 22
+      },
+      "Other": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 15
+      }
+    },
+    "performance": {
+      "total_parameters": 1545911808,
+      "trainable_parameters": 2188288,
+      "trainable_percentage": 0.1416,
+      "adapter_size_mb": 8.36,
+      "base_model_size_gb": 3.09,
+      "benchmark_batch_size": 8,
+      "max_sequence_length": 1024,
+      "batch_latency_seconds": 0.7793660379993526,
+      "latency_per_example_ms": 97.42075474991907,
+      "throughput_examples_per_second": 10.264753158267137,
+      "peak_gpu_memory_gb": 6.374042987823486
+    }
+  }
+}
